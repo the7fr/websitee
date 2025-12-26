@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GoldPump Rain Tracker</title>
+    <style>
+        body {
+            background:#0e0e0e;
+            color:white;
+            font-family:sans-serif;
+            text-align:center;
+        }
+        .card {
+            margin-top:40px;
+            padding:20px;
+            background:#1a1a1a;
+            border-radius:12px;
+            display:inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🌧 GoldPump Rain Tracker</h1>
+
+<div class="card" id="status">Loading...</div>
+
+<script>
+async function update() {
+    const res = await fetch("/api/rain");
+    const data = await res.json();
+
+    if (!data.active) {
+        status.innerHTML = "❌ No active rain";
+        return;
+    }
+
+    status.innerHTML = `
+        💰 Amount: ${data.amount?.toLocaleString() || "Unknown"}<br>
+        ⏰ Ends in: <t:${data.ends_at}:R>
+    `;
+}
+
+setInterval(update, 1000);
+update();
+</script>
+
+</body>
+</html>
